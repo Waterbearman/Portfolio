@@ -1,0 +1,16 @@
+<bookings>
+<booking>
+    <bookingnum>1234</bookingnum>
+    <area>1</area>
+    <bookingdate>2022-02-18 오후 4:44:11</bookingdate>
+    <userid></userid>
+    <userName></userName>
+</booking>
+<booking>
+    <bookingnum>55</bookingnum>
+    <area>2</area>
+    <bookingdate>2022-02-17 오후 4:44:11</bookingdate>
+    <userid></userid>
+    <userName></userName>
+</booking>
+</bookings>
