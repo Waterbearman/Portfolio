@@ -25,25 +25,19 @@ namespace Camping_Test
 
             foreach(var item in DataManager.bookings)
             {
-                if(item.Area == textBox_Area.Text)
-                {
-                    existBooking = true;
-                    break;
-                }
-                else if(item.BookingNum == textBox_Booking.Text)
+                if(item.Area == textBox_Area.Text && item.BookingNum == textBox_Booking.Text)
                 {
                     existBooking = true;
                     break;
                 }
             }
             if(existBooking)
-                MessageBox.Show("이미 예약 되어 있습니다.");
+                MessageBox.Show("이미 존재하는 예약 및 자리 입니다.");
             else
             {
                 Booking booking = new Booking();
                 booking.BookingNum = textBox_Booking.Text;
                 booking.Area = textBox_Area.Text;
-                booking.BookingDate = dateTimePicker1.Value;
                 DataManager.bookings.Add(booking);
 
                 dataGridView1.DataSource = null;
@@ -62,7 +56,6 @@ namespace Camping_Test
                     booking = DataManager.bookings[i];
                     booking.BookingNum = textBox_Booking.Text;
                     booking.Area = textBox_Area.Text;
-                    booking.BookingDate= dateTimePicker1.Value;
 
                     dataGridView1.DataSource= null;
                     dataGridView1.DataSource= DataManager.bookings;
@@ -102,7 +95,6 @@ namespace Camping_Test
             Booking booking = dataGridView1.CurrentRow.DataBoundItem as Booking;
             textBox_Booking.Text = booking.BookingNum;
             textBox_Area.Text = booking.Area;
-            dateTimePicker1.Value = booking.BookingDate;
         }
     }
 }

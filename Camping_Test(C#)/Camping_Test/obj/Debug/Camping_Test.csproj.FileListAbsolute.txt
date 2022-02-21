@@ -11,3 +11,16 @@ F:\경북산업직업전문학교(C#)\Camping\Camping_Test\Camping_Test\obj\Debu
 F:\경북산업직업전문학교(C#)\Camping\Camping_Test\Camping_Test\obj\Debug\Camping_Test.pdb
 F:\경북산업직업전문학교(C#)\Camping\Camping_Test\Camping_Test\obj\Debug\Camping_Test.Form2.resources
 F:\경북산업직업전문학교(C#)\Camping\Camping_Test\Camping_Test\obj\Debug\Camping_Test.Form3.resources
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\bin\Debug\Camping_Test.exe.config
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\bin\Debug\Camping_Test.exe
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\bin\Debug\Camping_Test.pdb
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.csproj.AssemblyReference.cache
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.csproj.SuggestedBindingRedirects.cache
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.Form1.resources
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.Form2.resources
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.Form3.resources
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.Properties.Resources.resources
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.csproj.GenerateResource.cache
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.csproj.CoreCompileInputs.cache
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.exe
+C:\Users\KB\Documents\GitHub\Portfolio\Camping_Test(C#)\Camping_Test\obj\Debug\Camping_Test.pdb

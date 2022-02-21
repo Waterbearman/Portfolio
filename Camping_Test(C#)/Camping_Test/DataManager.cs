@@ -23,14 +23,18 @@ namespace Camping_Test
             {
                 string bookingOutput = File.ReadAllText(@"./Booking.xml");
                 XElement bookingXElement = XElement.Parse(bookingOutput);
-                foreach(var item in bookingXElement.Descendants("booking"))
+                bookings.Clear();
+                foreach (var item in bookingXElement.Descendants("booking"))
                 {
                     Booking temp = new Booking();
                     temp.BookingNum = item.Element("bookingnum").Value;
                     temp.Area = item.Element("area").Value;
                     temp.BookingDate = DateTime.Parse(item.Element("bookingdate").Value);
+                    temp.Checking = item.Element("checking").Value != "0"? true : false;
                     temp.UserId = item.Element("userid").Value;
                     temp.UserName = item.Element("userName").Value;
+
+                    bookings.Add(temp);
                 }
 
                 string userOuput = File.ReadAllText(@"./Users.xml");
@@ -65,6 +69,7 @@ namespace Camping_Test
                 bookingOutput += $"    <bookingnum>{item.BookingNum}</bookingnum>\n";
                 bookingOutput += $"    <area>{item.Area}</area>\n";
                 bookingOutput += $"    <bookingdate>{item.BookingDate}</bookingdate>\n";
+                bookingOutput += "    <checking>"+ (item.Checking ? 1 : 0) + "</checking>";
                 bookingOutput += $"    <userid>{item.UserId}</userid>\n";
                 bookingOutput += $"    <userName>{item.UserName}</userName>\n";
 
