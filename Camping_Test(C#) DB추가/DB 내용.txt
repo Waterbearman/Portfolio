@@ -1,0 +1,11 @@
+create database campingbooking;
+
+create table user(
+id varchar(20) primary key not null,
+name varchar(20)
+);
+
+
+insert into user(id, name) values ('qwer', '조현태');
+insert into user(id, name) values ('asdf', '이성계');
+insert into user(id, name) values ('zxcv', '팀쿡');
