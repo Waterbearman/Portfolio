@@ -15,6 +15,7 @@ namespace Camping_Test
         public BookingForm()
         {
             InitializeComponent();
+            Text = "예약 현황";
             if(DataManager.bookings.Count > 0)
                 dataGridView1.DataSource = DataManager.bookings;
         }
@@ -92,9 +93,12 @@ namespace Camping_Test
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if(DataManager.bookings.Count > 0)
+            {
             Booking booking = dataGridView1.CurrentRow.DataBoundItem as Booking;
             textBox_Booking.Text = booking.BookingNum;
             textBox_Area.Text = booking.Area;
+            }
         }
     }
 }

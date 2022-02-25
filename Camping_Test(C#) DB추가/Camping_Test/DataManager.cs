@@ -22,9 +22,31 @@ namespace Camping_Test
         {
             try
             {
+                DBHelper.selectQuery_Booking();
+                bookings.Clear();
+
+                foreach(DataRow item in DBHelper.dt_booking.Rows)
+                {
+                    Booking booking = new Booking();
+                    booking.BookingNum = item["bookingnum"].ToString();
+                    booking.Area = item["area"].ToString();
+                    booking.BookingDate = item["bookingdate"].ToString() == "" ? new DateTime() : DateTime.Parse(item["bookingdate"].ToString());
+                    booking.Checking = bool.Parse(item["checking"].ToString());
+                    if (item["userId"].ToString() == "")
+                    {
+                        booking.UserId = null;
+                    }
+                    else
+                    {
+                        booking.UserId=item["userId"].ToString();
+                    }
+                    booking.UserName = item["username"].ToString();
+                    bookings.Add(booking);
+                }
+
                 DBHelper.selectQuery_User();
                 users.Clear();
-                foreach(DataRow item in DBHelper.dt_user.Rows)
+                foreach (DataRow item in DBHelper.dt_user.Rows)
                 {
                     User user = new User();
                     user.Id = item["Id"].ToString();
@@ -34,16 +56,23 @@ namespace Camping_Test
             }
             catch (Exception e)
             {
+                throw e;
             }
         }
         public static void Save()
         {
+            DBHelper.allDeleteTable("booking");
+            foreach(var item in bookings)
+            {
+                DBHelper.allInsertIntoBooking(item.BookingNum, item.Area, item.BookingDate, item.Checking, item.UserId, item.UserName);
+            }
             DBHelper.allDeleteTable("user");
             foreach( var item in users)
             {
                 DBHelper.allInsertIntoUser(item.Id, item.Name);
-            }
+            }          
         }
+
         //public static void Load()
         //{
         //    try

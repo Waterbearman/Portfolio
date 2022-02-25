@@ -9,3 +9,14 @@ name varchar(20)
 insert into user(id, name) values ('qwer', '조현태');
 insert into user(id, name) values ('asdf', '이성계');
 insert into user(id, name) values ('zxcv', '팀쿡');
+
+create table booking(
+bookingnum int primary key not null,
+area varchar(20),
+bookingdate datetime,
+checking bool
+);
+
+insert into booking(bookingnum, area, bookingdate, checking) values(111000, 'a-1', '2022-02-25', false);
+insert into booking(bookingnum, area, bookingdate, checking) values(111001, 'a-2', '2022-02-25', false);
+insert into booking(bookingnum, area, bookingdate, checking) values(111002, 'a-3', '2022-02-25', false);

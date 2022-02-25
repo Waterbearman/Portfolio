@@ -1,21 +1,7 @@
 <bookings>
 <booking>
-    <bookingnum>a11</bookingnum>
-    <area>a1</area>
-    <bookingdate>2022-02-21 오후 12:52:18</bookingdate>
-    <checking>1</checking>    <userid>qwer</userid>
-    <userName>조현태</userName>
-</booking>
-<booking>
-    <bookingnum>a22</bookingnum>
-    <area>a2</area>
-    <bookingdate>2022-02-21 오후 12:52:26</bookingdate>
-    <checking>1</checking>    <userid>asdf</userid>
-    <userName>김기환</userName>
-</booking>
-<booking>
-    <bookingnum>a33</bookingnum>
-    <area>a3</area>
+    <bookingnum>aaa</bookingnum>
+    <area>bbb</area>
     <bookingdate>0001-01-01 오전 12:00:00</bookingdate>
     <checking>0</checking>    <userid></userid>
     <userName></userName>

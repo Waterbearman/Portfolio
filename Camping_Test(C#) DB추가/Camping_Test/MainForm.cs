@@ -37,9 +37,13 @@ namespace Camping_Test
 
         private void Book_GridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            Booking booking = dataGridView1.CurrentRow.DataBoundItem as Booking;
-            textBox_AreaNum.Text = booking.Area;
-            textBox_Booking.Text = booking.BookingNum;
+            if(DataManager.bookings.Count > 0)
+            {
+                Booking booking = dataGridView1.CurrentRow.DataBoundItem as Booking;
+                textBox_AreaNum.Text = booking.Area;
+                textBox_Booking.Text = booking.BookingNum;
+            }
+            
         }
 
         private void 예약현황ToolStripMenuItem_Click(object sender, EventArgs e)

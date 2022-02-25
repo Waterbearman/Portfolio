@@ -15,6 +15,7 @@ namespace Camping_Test
         public UserForm()
         {
             InitializeComponent();
+            Text = "회원 관리";
 
             if(DataManager.users.Count > 0)
                 dataGridView1.DataSource = DataManager.users;
@@ -27,7 +28,7 @@ namespace Camping_Test
                 {
                     User user = new User() { Id = textBox_ID.Text, Name = textBox_Name.Text };
                     DataManager.users.Add(user);
-                    DBHelper.InsertUser(user);
+                   // DBHelper.InsertUser(user);
 
                     dataGridView1.DataSource = null;
                     dataGridView1.DataSource = DataManager.users;
@@ -84,9 +85,12 @@ namespace Camping_Test
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if(DataManager.users.Count > 0)
+            {
             User user = dataGridView1.CurrentRow.DataBoundItem as User;
             textBox_ID.Text = user.Id.ToString();
             textBox_Name.Text = user.Name.ToString();
+            }
         }
     }
 }
