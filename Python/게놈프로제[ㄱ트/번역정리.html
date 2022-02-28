@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>asd</h1>
+    <div>
+        폐렴구균 (Streptococcus pneumoniae)
+        Enterococcus(장구균) _hirae
+    </div>
+    <div>
+        For the February 2022 Tabular Playground Series competition, your task is to classify 10 different bacteria <br>
+        species using data from a genomic analysis technique that has some data compression and data loss. <br>
+        In this <br>
+        technique, 10-mer snippets of DNA are sampled and analyzed to give the histogram of base count. <br>
+        In other words, <br>
+        the DNA segment becomes . Can you use this lossy information to accurately predict bacteria species?<br>
+        2022년 2월 Tabular Playground Series 대회에서 귀하의 임무는 데이터 압축 및 데이터 손실이 있는 <br>
+        게놈 분석 기술의 데이터를 사용하여 10가지 다른 박테리아 종을 분류하는 것입니다. <br>
+        이 기술에서는 DNA의 10-mer 조각을 샘플링하고 분석하여 염기 수의 히스토그램을 제공합니다. <br>
+        즉, DNA 세그먼트 aaaaaa 가 aaaaaa 가 됩니다. <br>
+        이 손실 정보를 사용하여 박테리아 종을 정확하게 예측할 수 있습니까? <br>
+    </div>
+    <div>
+        <div>
+            EDA for the February TPS
+            The present EDA explains the structures in the competition's dataset and derives ideas for modeling and for
+            creating a classifier.
+
+            In particular, it explains:
+
+            Why the feature values are discrete and what we can do with this information
+            How error rates are determined
+            How the test data deviate from the training data and what this means
+            At the end, a possible approach for solving the classification problem is proposed.
+
+            Some information in this EDA comes from the paper "Analysis of Identification Method for Bacterial Species
+            and
+            Antibiotic Resistance Genes Using Optical Data From DNA Oligomers".
+
+            2월 TPS용 EDA
+            현재 EDA는 경쟁 데이터 세트의 구조를 설명하고 모델링 및 분류기를 생성하기 위한 아이디어를 도출합니다.
+
+            특히 다음과 같이 설명합니다.
+
+            특성 값이 불연속적인 이유와 이 정보로 할 수 있는 작업
+            오류율 결정 방법
+            테스트 데이터가 훈련 데이터와 어떻게 다른지 그리고 이것이 의미하는 바
+            마지막으로 분류 문제를 해결하기 위한 가능한 접근 방식이 제안됩니다.
+
+            이 EDA의 일부 정보는 "DNA 올리고머의 광학 데이터를 사용하여 박테리아 종 및 항생제 내성 유전자에 대한 식별 방법 분석" 문서에서 가져왔습니다.
+        </div>
+        <div>
+            We start by reading the data and converting the bacteria names to numbers:
+
+            먼저 데이터를 읽고 박테리아 이름을 숫자로 변환합니다.
+        </div>
+        <div>
+            I'll skip the paragraphs about missing values (there are none)
+            and about class balance (the ten classes are
+            balanced) and immediately jump into the interesting analysis.
+            결측값(아무것도 없음)과 클래스 균형(10개의 클래스가 균형을 이루고 있음)에 대한
+            단락을 건너뛰고 즉시 흥미로운 분석으로 넘어가겠습니다.
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div>
+            Discreteness of the values <br>
+            Let's look at the unique values of an arbitrary feature. We notice: <br>
+            Although the feature is a floating point number, there are not 200000 unique values, <br>
+            but only about one hundred. <br>
+            The last few digits are always the same <br>
+            (they always end with 0846558 from 1.00846558e-05 through 9.70846558e-05). <br>
+
+            값의 불연속성 <br>
+            임의 기능의 고유 값을 살펴보겠습니다. 우리는 다음과 같은 사실을 알았습니다. <br>
+
+            이 기능은 부동 소수점 숫자이지만 고유 값이 200000개가 아니라 약 1000개 정도입니다.<br>
+            마지막 몇 자리는 항상 동일합니다(1.00846558e-05부터 9.70846558e-05까지 항상 0846558로 끝남).<br>
+        </div>
+        <div>
+            This observation strongly suggests that these values originally were integers. These integers were divided
+            by
+            1000000 and a constant was subtracted.
+
+            The paper describes this process and gives the formula for the additive constant, which they call bias. With
+            the
+            help of this formula, we can convert the floating point numbers back to the original integers:
+
+            이 관찰은 이러한 값이 원래 정수였음을 강력하게 시사합니다. 이 정수를 1000000으로 나눈 다음 상수를 뺍니다.
+
+            이 논문은 이 과정을 설명하고 그들이 편향이라고 부르는 덧셈 상수에 대한 공식을 제공합니다.
+            이 공식을 사용하여 부동 소수점 숫자를 원래 정수로 다시 변환할 수 있습니다.
+        </div>
+        <div>
+            The integers sum up to one million in every row:
+            정수는 모든 행에서 최대 100만까지 합산됩니다.
+        </div>
+        <div>
+            Did you notice that in some rows all entries are multiples of 10 or of 1000? We'll verify this
+            systematically by
+            computing the greatest common divisor (gcd) for every row:
+            일부 행에서 모든 항목이 10의 배수 또는 1000의 배수라는 것을 알고 계셨습니까?
+            모든 행에 대해 최대공약수(gcd)를 계산하여 이를 체계적으로 확인할 것입니다.
+        </div>
+        <div>
+            We see that there are four gcd values (1, 10, 1000 and 10000) with equal frequencies. Connecting this result
+            with what they write in the paper, we understand this part of the experiment:
+
+            For every row, they take the DNA of a bacterium and cut it into decamers (DNA substrings of length 10). Then
+            they put 1000000, 100000, 1000 or 100 decamers into their machine, and the machine counts how many times
+            every
+            of the 286 types from A0T0G0C10 to A10T0G0C0 occurs. This is what they call the spectrum (one could as well
+            call
+            it a histogram with 286 bins). They normalize the spectrum by dividing all counts by the row sum and
+            subtracting
+            the bias.
+
+            Every bacterium has its own characteristic spectrum, and the competition task is predicting the bacterium's
+            name
+            from the spectrum of a sample. If the sample spectrum is made from a million decamers, we'll have accurate
+            estimates of the true frequencies and predicting the name will be easy; if the spectrum is made from only
+            100
+            decamers, we have little information and the prediction will be hard (the classes overlap). We can see the
+            influence of the number of decamers in the following four PCA plots:
+
+            주파수가 동일한 4개의 gcd 값(1, 10, 1000 및 10000)이 있음을 알 수 있습니다. 이 결과를 그들이 논문에 쓴
+            내용과 연결하여 우리는 실험의 이 부분을 이해합니다.
+
+            모든 행에 대해 그들은 박테리아의 DNA를 가져와 십진법(DNA 부분 문자열 길이 10)으로 자릅니다.
+            그런 다음 1000000, 100000, 1000 또는 100 데카머를 기계에 넣고 기계는
+            A0T0G0C10에서 A10T0G0C0까지 286가지 유형이 모두 몇 번 발생하는지 계산합니다. 이것은 그들이
+            스펙트럼이라고 부르는 것입니다(286개의 빈이 있는 히스토그램이라고 부를 수도 있습니다).
+            그들은 모든 카운트를 행 합으로 나누고 바이어스를 빼서 스펙트럼을 정규화합니다.
+
+            모든 박테리아는 고유한 스펙트럼을 가지고 있으며 경쟁 과제는 샘플의 스펙트럼에서 박테리아의 이름을 예측하는 것입니다.
+            샘플 스펙트럼이 100만 데카머로 만들어진다면 실제 주파수에 대한 정확한 추정치를
+            갖게 될 것이고 이름을 예측하는 것은 쉬울 것입니다. 스펙트럼이 100개의 데카머만으로 만들어지면 정보가 거의 없고
+            예측이 어려울 것입니다(클래스가 겹침). 다음 4가지 PCA 플롯에서 Decamer
+            수의 영향을 확인할 수 있습니다.
+        </div>
+        <div>
+            Insight:
+
+            We may want to create four separate classifiers for the four GCD values.
+            For GCD = 1, we expect high accuracy;
+            for GCD = 10000, accuracy will be lower.
+            If we create only a single classifier, the gcd can be used as an additional feature.
+
+            인사이트(통찰):
+            4개의 GCD 값에 대해 4개의 개별 분류기를 생성할 수 있습니다.
+            GCD = 1의 경우 높은 정확도가 예상됩니다.
+            GCD = 10000의 경우 정확도가 낮아집니다.
+            분류기를 하나만 생성한다면 gcd를 추가 기능으로 사용할 수 있습니다.
+        </div>
+    </div>
+    <div>
+        <div>
+            Duplicates
+            A third of the data are duplicates (thanks to @teckmengwong for pointing this out):
+
+            중복
+            데이터의 1/3이 중복됩니다
+        </div>
+
+        <div>
+            Counting the duplicates for the four GCD values separately,
+            we see that most duplicates occur for the high GCD
+            values. This can be explained: If every observation consists of 100 decamers in 286 bins,
+            we should expect more
+            duplicates than if 1000000 decamers are put in 286 bins.
+            4개의 GCD 값에 대한 중복을 개별적으로 계산하면
+            대부분의 중복이 높은 GCD 값에 대해 발생한다는 것을 알 수 있습니다. 이것은 설명할 수 있습니다.
+            모든 관찰이 286개의 빈에 있는 100개의
+            데카머로 구성되어 있다면 1000000개의 데카머가 286개의 빈에 들어가는 것보다 더 많은 중복을 예상해야 합니다.
+        </div>
+        <div>
+            Insight:
+
+            We can reduce training and inference time by dropping the duplicates (and adjusting the sample weights).
+
+            If we don't drop the duplicates, we must ensure that they don't inflate the cv scores.
+            If the validation fold contains duplicates of a training fold's values, cv scores will be too high.
+
+            There seems to be a fundamental difference between the low gcds (which have few duplicates) and the high
+            gcds
+            (which have many duplicates).
+
+            통찰력:
+
+            중복을 삭제하고(샘플 가중치를 조정하여) 훈련 및 추론 시간을 줄일 수 있습니다.
+
+            중복을 삭제하지 않으면 cv 점수가 부풀려지지 않도록 해야 합니다.
+            유효성 검사 폴드에 훈련 폴드 값의 중복이 포함되어 있으면 cv 점수가 너무 높아집니다.
+
+            낮은 gcd(중복이 거의 없음)와 높은 gcd(중복이 많음) 사이에는 근본적인 차이가 있는 것 같습니다.
+        </div>
+    </div>
+    <div>
+        <div>
+            Understanding the simulated errors
+
+            Now we plot two arbitrary features at the highest precision (1000000 decamers).
+            We see that the points of every
+            class are grouped into eight clusters, the eight clusters lie on a straight line,
+            and all these straight lines
+            intersect in the origin:
+
+            이제 가장 높은 정밀도(1000000 데카머)로 두 개의 임의의 기능을 플로팅합니다.
+
+            우리는 모든 클래스의 포인트가 8개의 클러스터로 그룹화되어 있음을 알 수 있습니다.
+
+            8개의 덩어리가 일직선상에 놓여 있고,
+
+            이 모든 직선은 원점에서 교차합니다.
+        </div>
+        <div>
+            Again, this is explained in the paper: Although every bacterium has its characteristic spectrum, the
+            experiment
+            produces a lot of noise. They model this noise by replacing a part of the bacterium's decamers by random
+            decamers, and this amounts to a scaling of the spectrum towards the origin.
+
+            The original clusters (far away from the origin) do not overlap, and classification is easy. With higher
+            error
+            rates, the clusters get nearer to the origin and start to overlap. Of course: higher error rates make
+            classification more difficult.
+
+            The following histograms show that there are eight scalings (corresponding to eight error rates), and that
+            the
+            scalings are the same for all ten bacteria. We can read the eight values out of the histograms or determine
+            them
+            by a one-dimensional k-means clustering. The seven scaled-down clusters have size 550 and no duplicates
+            within
+            them; the unscaled cluster has size 1100 (of which 800 are unique and 300 are duplicates).
+
+            다시 말하지만, 이것은 논문에서 설명합니다. 모든 박테리아에는 고유한 스펙트럼이 있지만 실험은 많은 노이즈를 생성합니다.
+            그들은 박테리아의 decamer의 일부를 임의의 decamer로 교체하여 이
+            노이즈를 모델링했으며 이는 원점을 향한 스펙트럼의 스케일링에 해당합니다.
+
+            원래 클러스터(원점에서 멀리 떨어져 있음)가 겹치지 않고 분류가 쉽습니다.
+            오류율이 높을수록 클러스터는 원점에 더 가까워지고 겹치기 시작합니다.
+            물론 오류율이 높으면 분류가 더 어려워집니다.
+
+            다음 히스토그램은 8개의 스케일링(8개의 오류율에 해당)이 있고 스케일링이 10개의 박테리아 모두에 대해 동일함을 보여줍니다.
+            히스토그램에서 8개 값을 읽거나 1차원 k-means 클러스터링으로 결정할
+            수 있습니다. 축소된 7개의 클러스터는 크기가 550이고 내부에 중복이 없습니다.
+            확장되지 않은 클러스터의 크기는 1100입니다(이 중 800은 고유하고 300은 중복).
+        </div>
+        <div>
+            Insight:
+
+            It should be possible to create a model which has 286 parameters per bacterium.
+            These parameters should suffice
+            to classify all samples. To fit these parameters,
+            it may be useful to give the samples farther away from the
+            origin a higher sample weight.
+
+            Something is strange with the duplicates. These duplicates need further investigation.
+
+            통찰력:
+
+            박테리아당 286개의 매개변수가 있는 모델을 생성할 수 있어야 합니다.
+            이 매개변수는 모든 샘플을 분류하는 데 충분해야 합니다.
+            이러한 매개변수를 맞추기 위해 원본에서 멀리 떨어진 샘플에 더 높은 샘플
+            가중치를 부여하는 것이 유용할 수 있습니다.
+
+            중복 항목이 이상합니다. 이러한 중복 항목에 대해서는 추가 조사가 필요합니다.
+        </div>
+    </div>
+    <div>
+        <div>
+            Comparing train and test
+
+            We can plot training and test data in the same diagram. There is a small deviation.
+            This was announced in
+            the paper: We train the classifier with some bacteria DNA, but the bacteria in the test set will have
+            undergone mutation and have slightly different DNA.
+            기차와 테스트 비교
+
+            동일한 다이어그램에 훈련 및 테스트 데이터를 표시할 수 있습니다. 약간의 편차가 있습니다.
+            이것은 논문에서 발표되었습니다. 우리는 일부 박테리아 DNA로 분류기를 훈련하지만 테스트 세트의
+            박테리아는 돌연변이를 거쳐 약간 다른 DNA를 갖게 됩니다.
+        </div>
+        <div>
+            Every dot in the diagram represents a cluster of 500 observations.
+
+            Insight:
+
+            Training a classifier on the training data isn't enough. For really accurate results, we will somehow need
+            to model the deviation between training and test data.
+
+            We have to think about our cross-validation strategy: What sense does it make to cross-validate if the
+            validation data are distributed differently from the test data?
+
+            Maybe we can artificially generate data with the test distribution by fitting the spectra of the test
+            bacteria and then using a numpy.random.Generator.multinomial to augment the data.
+
+            Or perhaps pseudo-labeling or another semi-supervised method will serve as magic trick.
+            
+            다이어그램의 모든 점은 500개의 관측치로 구성된 클러스터를 나타냅니다.
+
+            통찰력:
+
+            훈련 데이터에 대한 분류기를 훈련시키는 것만으로는 충분하지 않습니다. 
+            정말 정확한 결과를 얻으려면 어떻게든 훈련 데이터와 테스트 데이터 간의 편차를 모델링해야 합니다.
+
+            우리는 교차 검증 전략에 대해 생각해야 합니다. 검증 데이터가 테스트 데이터와 다르게 분포되어 있다면 
+            교차 검증이 무슨 의미가 있습니까?
+
+            테스트 박테리아의 스펙트럼을 맞춘 다음 numpy.random.Generator.multinomial을 사용하여 데이터를 
+            보강하여 테스트 분포로 데이터를 인위적으로 생성할 수 있습니다.
+
+            또는 의사 라벨링이나 다른 반 감독 방법이 마술처럼 작용할 것입니다.
+        </div>
+    </div>
+    <div>
+        Modeling approach
+
+        The data we have seen suggest that gradient boosting is not necessarily the optimal method for the task at hand.
+        Maybe it is better to fit the characteristic spectrum for every bacterium and then try a maximum likelihood
+        classification.
+
+        The cross-validation strategy will have to take the drift of the test distribution into account.
+
+        The gcd can be used as a feature, or we can create four separate classifiers based on gcd.
+
+        Another approach could be to use a numpy.random.Generator.multinomial to augment the data.
+        모델링 접근 방식
+
+        우리가 본 데이터는 그래디언트 부스팅이 반드시 당면한 작업에 대한 최적의 방법이 아님을 시사합니다. 
+        모든 박테리아에 대한 특성 스펙트럼을 맞춘 다음 최대 가능성 분류를 시도하는 것이 더 나을 수도
+        있습니다.
+
+        교차 검증 전략은 테스트 분포의 변동을 고려해야 합니다.
+
+        gcd를 기능으로 사용하거나 gcd를 기반으로 4개의 개별 분류기를 만들 수 있습니다.
+
+        또 다른 접근 방식은 numpy.random.Generator.multinomial을 사용하여 데이터를 보강하는 것입니다.
+    </div>
+</body>
+
+</html>

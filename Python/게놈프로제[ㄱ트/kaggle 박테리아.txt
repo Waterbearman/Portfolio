@@ -1,11 +1,10 @@
-2022년 2월 표형 놀이터 시리즈 대회의 경우 데이터 압축과 데이터 손실이 어느 정도 발생하는 
-게놈 분석기법의 데이터를 활용해 10종의 세균 종을 분류하는 것이 과제다. 
-이 기법에서 DNA의 10-mer 조각을 샘플링하고 분석하여 염기 카운트의 히스토그램을 제공한다. 
-즉, DNA 세그먼트는 ATATGGCCTT
 
-된다
-
-당신은 박테리아 종을 정확하게 예측하기 위해 이 손실 정보를 사용할 수 있습니까?
+For the February 2022 Tabular Playground Series competition, your task is to classify 10 different bacteria species using data from a genomic analysis technique that has some data compression and data loss. In this technique, 10-mer snippets of DNA are sampled and analyzed to give the histogram of base count. In other words, the DNA segment  becomes . Can you use this lossy information to accurately predict bacteria species?
+또는 2022년 2월 Tabular Playground Series 대회에서 귀하의 임무는 데이터 압축 및 데이터 손실이 있는 
+게놈 분석 기술의 데이터를 사용하여 10가지 다른 박테리아 종을 분류하는 것입니다.
+이 기술에서는 DNA의 10-mer 조각을 샘플링하고 분석하여 염기 수의 히스토그램을 제공합니다.
+즉, DNA 세그먼트 aaaaaa 가 aaaaaa 가 됩니다.
+이 손실 정보를 사용하여 박테리아 종을 정확하게 예측할 수 있습니까?
 
 표 형식의 놀이터 시리즈 정보
 
@@ -35,22 +34,49 @@ URL={https://www.frontiersin.org/article/10.3389/fmicb.2020.00257},
 DOI={10.3389/fmicb.2020.00257,      
 ISSN={1664-302X}
 
+{
+EDA for the February TPS
+The present EDA explains the structures in the competition's dataset and derives ideas for modeling and for creating a classifier.
+
+In particular, it explains:
+
+Why the feature values are discrete and what we can do with this information
+How error rates are determined
+How the test data deviate from the training data and what this means
+At the end, a possible approach for solving the classification problem is proposed.
+
+Some information in this EDA comes from the paper 
+"Analysis of Identification Method for Bacterial Species and Antibiotic Resistance Genes Using Optical Data From DNA Oligomers".
 
 
+2월 TPS용 EDA
+
+현재 EDA는 경쟁 데이터 세트의 구조를 설명하고 모델링 및 분류기를 생성하기 위한 아이디어를 도출합니다.
+
+특히 다음과 같이 설명합니다.
+
+- 특성 값이 이산적인 이유와 이 정보로 할 수 있는 일
+
+- 오류율이 결정되는 방법
+
+- 테스트 데이터가 훈련 데이터와 어떻게 다른지 그리고 이것이 의미하는 바
+
+마지막으로 분류 문제를 해결하기 위한 가능한 접근 방식이 제안됩니다.
+
+이 EDA의 일부 정보는 "DNA 올리고머의 광학 데이터를 사용하여 박테리아 종 및 항생제 내성 유전자에 대한 식별 방법 분석" 문서에서 가져왔습니다.
+}
 
 
-2월 TPS를 위한 EDA
-현재 EDA는 경쟁사 데이터 세트의 구조를 설명하고 모델링 및 분류기 생성을 위한 아이디어를 도출한다.
+{
+We start by reading the data and converting the bacteria names to numbers:
+먼저 데이터를 읽고 박테리아 이름을 숫자로 변환합니다.
+}
 
-특히 다음과 같이 설명하고 있다.
+{
+I'll skip the paragraphs about missing values (there are none) 
+and about class balance (the ten classes are balanced) 
+and immediately jump into the interesting analysis.
 
-피쳐 값이 서로 다른 이유 및 이 정보로 수행할 수 있는 작업
-오류율 결정 방법
-테스트 데이터가 교육 데이터와 어떻게 다른지, 그리고 이것이 의미하는 바는
-마지막에 분류 문제를 해결하기 위한 가능한 접근법이 제안된다.
-
-이 EDA의 일부 정보는 "DNA 올리고머의 광학 데이터를 이용한 박테리아 종 및 항생제 내성 유전자의 식별 방법 분석"이라는 논문에서 얻을 수 있다.
-
-
-
-우리는 데이터를 읽고 박테리아 이름을 숫자로 변환하는 것부터 시작합니다.
+결측값(아무것도 없음)과 클래스 균형(10개의 클래스가 균형을 이루고 있음)
+에 대한 단락을 건너뛰고 즉시 흥미로운 분석으로 넘어가겠습니다.
+}
